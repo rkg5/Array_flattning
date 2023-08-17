@@ -1,0 +1,45 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+#define int long long int
+const int N = 200005;
+int cnt = 1;
+int in_time[N], out_time[N], flatted_array[N];
+vector<int> adj[N];
+
+void flatted_tree(int node, int par) {
+    in_time[node] = cnt;
+    flatted_array[cnt] = node;
+    cnt++;
+    for (auto child : adj[node]) {
+        if (child != par) {
+            flatted_tree(child, node);
+        }
+    }
+    out_time[node] = cnt;
+    flatted_array[cnt] = node;
+    cnt++;
+}
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    int u, v;
+    for (int i = 0; i < m; i++) {
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    flatted_tree(1, -1);
+    for (int i = 1; i <= 2 * n; i++) {
+        // cout<<in_time[i]<<" ";
+        cout << flatted_array[i] << " ";
+    }
+    cout << endl;
+}
+
+signed main() {
+    solve();
+    return 0;
+}
